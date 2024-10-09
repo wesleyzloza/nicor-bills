@@ -1,12 +1,24 @@
 {
   "name": "nicor-download",
+  "description": "A Node.js library to bulk download utility bills from the Nicor Gas/Southern Company web portal.",
+  "license": "MIT",
+  "homepage": "https://github.com/wesleyzloza/nicor-download#readme",
+  "author": {
+    "name": "Wesley Zloza",
+    "email": "mortem-web@pm.me",
+    "url": "https://mastodon.social/@mortem"
+  },
+  "keywords": [
+    "downloader",
+    "natural gas",
+    "natural-gas",
+    "utility-bills",
+    "nicor-gas",
+    "southern-gas-company"
+  ],
   "version": "1.0.0",
   "main": "index.mjs",
   "scripts": {},
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "devDependencies": {
     "@types/node": "^22.5.4"
   },

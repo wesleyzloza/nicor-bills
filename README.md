@@ -1,16 +1,21 @@
 # Nicor Gas Bill Downloader
 
-A utility scrummed together to bulk download utilty bills from the
-[Nicor Gas](https://www.nicorgas.com/)/[Southern Company](https://www.southerncompany.com/)
-web portal. Shared with the ether in the rare case some one else finds this
-useful.
+A Node.js library to bulk download utility bills from the [Nicor Gas/Southern Gas
+Company customer web portal](https://customerportal.southerncompany.com/).
+
+<img
+  alt="Down arrow colors matching the logo of the Souther Gas Company" 
+  src="./assets/icon.svg"
+  height="128" width="128" style="margin: 0 auto;">
 
 ## Background
 
-Most utility companies don't provide a way to bulk download your utility bills
-and will limit your billing history to the last two years. This limit is often
+Most utility companies don't provide a way to bulk download utility bills and
+will limit the billing history to the last two years. This limit is often
 restricted by the user interface and can be bypassed by querying the server
-directly. This was the case for Nicor Gas / Southern Company.
+directly. This was the case for
+[Nicor Gas](https://www.nicorgas.com/) /
+[Southern Company](https://www.southerncompany.com/).
 
 ## Usage
 
