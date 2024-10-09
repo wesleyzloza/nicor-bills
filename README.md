@@ -20,7 +20,7 @@ directly. This was the case for
 ## Usage
 
 The `NicorGasBillDownloader` class contains the following methods to for
-requesting and saving a bill for the Souther Company customer portal:  
+requesting and saving a bill for the Southern Gas Company customer portal:  
 
 - `authenticate()` - Authenticates and performs the necessary server operations to download bills.
 - `tryBulkDownload()` - Attempts to locate and download all bills within in range of dates.
