@@ -1,5 +1,5 @@
-import { AuthenticationError } from "./src/auth-error.mjs"
-import { NicorGasBillDownloader } from './downloader.mjs';
-import { PollingOptions } from "./src/downloader-options.mjs";
-export default NicorGasBillDownloader;
-export { AuthenticationError, NicorGasBillDownloader, PollingOptions };
+import { NicorGasBillDownloader } from './src/downloader.mjs';
+export default NicorGasBillDownloader; 
+export * from './src/auth-error.mjs';
+export * from './src/downloader.mjs';
+export * from './src/downloader-options.mjs';

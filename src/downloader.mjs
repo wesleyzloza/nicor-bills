@@ -4,8 +4,8 @@ import { eachMonthOfInterval, format } from 'date-fns';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import puppeteer from 'puppeteer';
-import { AuthenticationError } from './src/auth-error.mjs';
-import { PollingOptions } from './src/downloader-options.mjs';
+import { AuthenticationError } from './auth-error.mjs';
+import { PollingOptions } from './downloader-options.mjs';
 
 /**
  * Nicor Gas Bill Download Utility
