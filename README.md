@@ -17,6 +17,7 @@ directly. This was the case for Nicor Gas / Southern Company.
 The `NicorGasBillDownloader` class contains the following methods to for
 requesting and saving a bill for the Souther Company customer portal:  
 
+- `authenticate()` - Authenticates and performs the necessary server operations to download bills.
 - `tryBulkDownload()` - Attempts to locate and download all bills within in range of dates.
 - `tryDownloadingBill()` - Attempts to locate and download a bill for a specific month/year.
 - `requestBill()` - Requests a bill for given issue date.
@@ -27,13 +28,15 @@ import { NicorGasBillDownloader } from './downloader.mjs';
 
 const ACCOUNT_NUMBER = '12349780000';
 const BILL_ID = '98567123467';
-const COOKIES = '...';
+const USERNAME = 'JohnDoe';
+const PASSWORD = 'FooBaBaz123';
 
 const to = new Date();
 const from = sub(to, { months: 2 });
 const saveDirectory = import.meta.dirname;
-const billDownloader = new NicorGasBillDownloader(ACCOUNT_NUMBER, BILL_ID, COOKIES);
-billDownloader.tryBulkDownload(from, to, saveDirectory);
+const billDownloader = new NicorGasBillDownloader(ACCOUNT_NUMBER, BILL_ID);
+await billDownloader.authenticate(USERNAME, PASSWORD);
+await billDownloader.tryBulkDownload(from, to, saveDirectory);
 ```
 
 ## License

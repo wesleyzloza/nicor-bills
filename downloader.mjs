@@ -25,7 +25,16 @@ export class NicorGasBillDownloader {
   }
 
   /**
+   * Southern gas company customer portal base URL.
+   * @type {string}
+   * @private
+   */
+  _baseURL = 'https://customerportal.southerncompany.com';
+
+  /**
+   * Session cookies.
    * @type {import('puppeteer').Cookie[]}
+   * @private
    */
   _sessionCookies = [];
 
@@ -73,15 +82,17 @@ export class NicorGasBillDownloader {
         await fs.writeFile(savePath, stream);
 
         console.log(chalk.green('Success!\n'));
+        return;
       } catch (error) {
         if (error instanceof AuthenticationError) {
           console.log(chalk.red(error.message));
+          return;
         }
       }
     }
 
     console.log(chalk.red('Operation failed.\n'));
-    throw new Error(`Unable to find and/or download a bill for the month of ${issuedDateFormated}`)
+    throw new Error(`Unable to find and/or download a bill for the month of ${issuedDateFormated}`);
   }
 
   /**
@@ -91,9 +102,8 @@ export class NicorGasBillDownloader {
    * @returns {Promise<ReadableStream<Uint8Array>>}
    */
   async requestBill(billDate) {
-    const API_URL = 'https://customerportal.southerncompany.com/Billing/ViewBill';
     const billDateString = format(billDate, 'MM/dd/yyyy');
-    const requestUrl = `${API_URL}?BillDate=${billDateString}&BillId=${this.billId}&BillRoutingNum=1`;
+    const requestUrl = `${this._baseURL}/Billing/ViewBill?BillDate=${billDateString}&BillId=${this.billId}&BillRoutingNum=1`;
 
     try {
       const response = await fetch(requestUrl, {
@@ -110,7 +120,7 @@ export class NicorGasBillDownloader {
           'sec-fetch-site': 'none',
           'sec-fetch-user': '?1',
           'upgrade-insecure-requests': '1',
-          cookie: this._sessionCookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; '),
+          cookie: this._sessionCookies.map((cookie) => `${cookie.name}=${cookie.value}`).join('; '),
         },
         referrerPolicy: 'strict-origin-when-cross-origin',
         body: null,
@@ -141,15 +151,21 @@ export class NicorGasBillDownloader {
   async authenticate(username, password) {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-    await page.setViewport({width: 1920, height: 1080});
-    await page.goto('https://customerportal.southerncompany.com/User/Login?LDC=7');
+    await page.goto(`${this._baseURL}/User/Login?LDC=7`);
     await page.locator('#username').fill(username);
     await page.locator('#inputPassword').fill(password);
+
     await Promise.all([
       page.locator('#loginbtn').click(),
-      page.waitForNavigation({ waitUntil: 'networkidle0', timeout: 100000 })
+      page.waitForNavigation({ waitUntil: 'networkidle0', timeout: 100000 }),
     ]);
 
+    await Promise.all([
+      page.locator(`a ::-p-text(${this.accountNumber})`).click(),
+      page.waitForNavigation({ waitUntil: 'networkidle0', timeout: 100000 }),
+    ]);
+
+    await page.goto(`${this._baseURL}/Billing/PaymentHistory`);
     this._sessionCookies = await page.cookies();
     browser.close();
   }
