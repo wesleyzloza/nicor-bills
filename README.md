@@ -44,6 +44,15 @@ await billDownloader.authenticate(USERNAME, PASSWORD);
 await billDownloader.tryBulkDownload(from, to, saveDirectory);
 ```
 
+## System Requirements
+
+- Node v18+
+- x64 Architecture
+
+<!--
+https://github.com/puppeteer/puppeteer/blob/puppeteer-v23.0.0/docs/guides/system-requirements.md
+-->
+
 ## License
 
 MIT License
