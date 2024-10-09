@@ -1,0 +1,17 @@
+{
+  "name": "nicor-download",
+  "version": "1.0.0",
+  "main": "index.mjs",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.5.4"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "date-fns": "^3.6.0"
+  }
+}
