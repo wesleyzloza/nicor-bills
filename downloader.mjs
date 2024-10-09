@@ -3,6 +3,7 @@ import chalk from 'chalk';
 import { eachMonthOfInterval, format } from 'date-fns';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import puppeteer from 'puppeteer';
 import { AuthenticationError } from './auth-error.mjs';
 import { PollingOptions } from './downloader-options.mjs';
 
@@ -17,13 +18,16 @@ export class NicorGasBillDownloader {
    * Constructs a new instance of a Nicor Gas bill downloader.
    * @param {string} accountNumber Account number.
    * @param {string} billingId Billing identification number.
-   * @param {string} sessionCookies Cookies from an active web session.
    */
-  constructor(accountNumber, billingId, sessionCookies) {
+  constructor(accountNumber, billingId) {
     this.accountNumber = accountNumber;
     this.billId = billingId;
-    this.sessionCookies = sessionCookies;
   }
+
+  /**
+   * @type {import('puppeteer').Cookie[]}
+   */
+  _sessionCookies = [];
 
   /**
    * Tries to perform a bulk download of bills within a provided date range.
@@ -106,7 +110,7 @@ export class NicorGasBillDownloader {
           'sec-fetch-site': 'none',
           'sec-fetch-user': '?1',
           'upgrade-insecure-requests': '1',
-          cookie: this.sessionCookies,
+          cookie: this._sessionCookies.map(cookie => `${cookie.name}=${cookie.value}`).join('; '),
         },
         referrerPolicy: 'strict-origin-when-cross-origin',
         body: null,
@@ -127,5 +131,26 @@ export class NicorGasBillDownloader {
         throw new Error('An unknown error occurred.');
       }
     }
+  }
+
+  /**
+   * Authenticates against the backend server using a headless browser.
+   * @param {string} username Username
+   * @param {string} password Password
+   */
+  async authenticate(username, password) {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.setViewport({width: 1920, height: 1080});
+    await page.goto('https://customerportal.southerncompany.com/User/Login?LDC=7');
+    await page.locator('#username').fill(username);
+    await page.locator('#inputPassword').fill(password);
+    await Promise.all([
+      page.locator('#loginbtn').click(),
+      page.waitForNavigation({ waitUntil: 'networkidle0', timeout: 100000 })
+    ]);
+
+    this._sessionCookies = await page.cookies();
+    browser.close();
   }
 }
