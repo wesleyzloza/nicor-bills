@@ -17,11 +17,9 @@ export class NicorGasBillDownloader {
   /**
    * Constructs a new instance of a Nicor Gas bill downloader.
    * @param {string} accountNumber Account number.
-   * @param {string} billingId Billing identification number.
    */
-  constructor(accountNumber, billingId) {
+  constructor(accountNumber) {
     this.accountNumber = accountNumber;
-    this.billId = billingId;
   }
 
   /**
@@ -103,7 +101,7 @@ export class NicorGasBillDownloader {
    */
   async requestBill(billDate) {
     const billDateString = format(billDate, 'MM/dd/yyyy');
-    const requestUrl = `${this._baseURL}/Billing/ViewBill?BillDate=${billDateString}&BillId=${this.billId}&BillRoutingNum=1`;
+    const requestUrl = `${this._baseURL}/Billing/ViewBill?BillDate=${billDateString}`;
 
     try {
       const response = await fetch(requestUrl, {

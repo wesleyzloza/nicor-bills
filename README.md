@@ -4,7 +4,7 @@ A Node.js library to bulk download utility bills from the [Nicor Gas/Southern Ga
 Company customer web portal](https://customerportal.southerncompany.com/).
 
 <img
-  alt="Down arrow colors matching the logo of the Souther Gas Company" 
+  alt="Down arrow colors matching the logo of the Souther Gas Company"
   src="./assets/icon.svg"
   height="128" width="128" style="margin: 0 auto;">
 
@@ -29,17 +29,16 @@ requesting and saving a bill for the Southern Gas Company customer portal:
 
 ```javascript
 import { sub } from 'date-fns';
-import { NicorGasBillDownloader } from './downloader.mjs';
+import { NicorGasBillDownloader } from 'nicor-bills';
 
 const ACCOUNT_NUMBER = '12349780000';
-const BILL_ID = '98567123467';
 const USERNAME = 'JohnDoe';
 const PASSWORD = 'FooBaBaz123';
 
 const to = new Date();
 const from = sub(to, { months: 2 });
 const saveDirectory = import.meta.dirname;
-const billDownloader = new NicorGasBillDownloader(ACCOUNT_NUMBER, BILL_ID);
+const billDownloader = new NicorGasBillDownloader(ACCOUNT_NUMBER);
 await billDownloader.authenticate(USERNAME, PASSWORD);
 await billDownloader.tryBulkDownload(from, to, saveDirectory);
 ```
